@@ -21,10 +21,16 @@ const eliminarAuto = async (id) => {
   return await Auto.findByIdAndDelete(id);
 };
 
+const obtenerAutosPorUsuario = async (usuarioId) => {
+  return await Auto.find({ usuario: usuarioId }).populate('categoria');
+};
+
+
 module.exports = {
   crearAuto,
   obtenerAutos,
   obtenerAutoPorId,
   actualizarAuto,
-  eliminarAuto
+  eliminarAuto,
+  obtenerAutosPorUsuario
 };

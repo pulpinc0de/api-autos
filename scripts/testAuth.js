@@ -5,7 +5,6 @@ const BASE = process.env.API_URL || 'http://localhost:3000';
 
 async function run() {
   const timestamp = Date.now();
-  // allow using an existing user by setting EMAIL and PASSWORD env vars
   const envEmail = process.env.EMAIL;
   const envPassword = process.env.PASSWORD;
 
@@ -16,21 +15,21 @@ async function run() {
   if (envEmail && envPassword) {
     email = envEmail;
     password = envPassword;
-    console.log('Usando credenciales desde variables de entorno (solo login)');
+    console.log('Using credentials from environment (only login)');
   } else {
     email = `test+${timestamp}@example.com`;
     password = 'Password123!';
     userPayload = {
-      nombre: 'TestUser',
+      name: 'TestUser',
       email,
-      contraseña: password
+      password: password
     };
   }
 
   try {
     if (userPayload) {
       console.log('Intentando registrar usuario:', email);
-      const regRes = await axios.post(`${BASE}/api/usuarios/register`, userPayload, { timeout: 5000 });
+        const regRes = await axios.post(`${BASE}/api/usuarios/register`, userPayload, { timeout: 5000 });
       console.log('Registro exitoso, status:', regRes.status);
     } else {
       console.log('Omitiendo registro (se hará solo login)');
@@ -51,7 +50,7 @@ async function run() {
 
   try {
     console.log('Intentando login con:', email);
-    const loginRes = await axios.post(`${BASE}/api/usuarios/login`, { email, contraseña: password }, { timeout: 5000 });
+    const loginRes = await axios.post(`${BASE}/api/usuarios/login`, { email, password }, { timeout: 5000 });
     console.log('Login exitoso, status:', loginRes.status);
     if (loginRes.data && loginRes.data.token) {
       console.log('Token recibido:', loginRes.data.token);

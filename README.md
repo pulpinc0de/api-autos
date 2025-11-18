@@ -4,7 +4,7 @@ Descripción
 API REST básica para gestionar autos, categorías y usuarios. Incluye autenticación por JWT para operaciones protegidas (crear/actualizar/eliminar autos). Está escrita con Node.js, Express y MongoDB (Mongoose).
 
 Esquema de la base de datos (colecciones)
-Nota: los nombres de los campos usan español (ej. `año`, `contraseña`).
+Note: user-related fields use English now (e.g. `name`, `password`).
 
 - Colección `Categoria` (modelo `Categoria`)
   - _id: ObjectId
@@ -19,11 +19,11 @@ Nota: los nombres de los campos usan español (ej. `año`, `contraseña`).
   - precio: Number (required)
   - categoria: ObjectId → referencia a `Categoria` (required)
 
-- Colección `Usuario` (modelo `Usuario`)
+- Collection `User` (model `User`)
   - _id: ObjectId
-  - nombre: String (required)
+  - name: String (required)
   - email: String (required, unique)
-  - contraseña: String (hashed, required)
+  - password: String (hashed, required)
 
 Tecnologías utilizadas
 - Node.js
@@ -65,14 +65,14 @@ npm run dev
 Listado de Endpoints (Rutas)
 Base: `http://localhost:3000` (por defecto)
 
-Rutas de usuarios (`/api/usuarios`)
-- POST /api/usuarios/register — Registrar usuario
-  - Body: { nombre, email, contraseña }
-  - Respuesta: 201 -> documento del usuario (contraseña hasheada)
+User routes (`/api/usuarios`)
+- POST /api/usuarios/register — Register user
+  - Body: { name, email, password }
+  - Response: 201 -> { user, token }
 
 - POST /api/usuarios/login — Login
-  - Body: { email, contraseña }
-  - Respuesta: 200 -> { token }
+  - Body: { email, password }
+  - Response: 200 -> { user, token }
 
 Rutas de categorías (`/api/categorias`)
 - POST /api/categorias — Crear categoría
@@ -100,13 +100,13 @@ La protección de rutas usa el middleware `verifyToken` que espera el header `au
 
 Ejemplos de datos (JSON) para solicitudes POST
 
-1) Registrar usuario (POST /api/usuarios/register)
+1) Register user (POST /api/usuarios/register)
 
 ```json
 {
-  "nombre": "Admin",
+  "name": "Admin",
   "email": "admin@example.com",
-  "contraseña": "admin123"
+  "password": "admin123"
 }
 ```
 
@@ -115,7 +115,7 @@ Ejemplos de datos (JSON) para solicitudes POST
 ```json
 {
   "email": "admin@example.com",
-  "contraseña": "admin123"
+  "password": "admin123"
 }
 ```
 

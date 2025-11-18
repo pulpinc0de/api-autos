@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-  nombre: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  contraseña: { type: String, required: true }
+	name: { type: String, required: true },
+	email: { type: String, required: true, unique: true },
+	password: { type: String, required: true, select: false },
 });
 
-// Hook para hashear la contraseña antes de guardar
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('contraseña')) return next();
-  this.contraseña = await bcrypt.hash(this.contraseña, 10);
-  next();
+// Hash contraseña antes de guardar
+userSchema.pre('save', function (next) {
+	if (!this.isModified('password')) return next();
+	this.password = bcrypt.hashSync(this.password, 10);
+	next();
 });
 
-module.exports = mongoose.model('Usuario', userSchema);
+module.exports = mongoose.model('User', userSchema);

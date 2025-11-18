@@ -1,16 +1,17 @@
 {
   "name": "proyectocrud",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "./api/App.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js",
+    "dev": "nodemon ./api/App.js",
+    "start":"node ./api/App.js",
     "seed": "node scripts/seed.js",
     "test:auth": "node scripts/testAuth.js"
   },
   "author": "mari",
   "license": "ISC",
-  "description": "",
+  "description": "Descripción\r API REST básica para gestionar autos, categorías y usuarios. Incluye autenticación por JWT para operaciones protegidas (crear/actualizar/eliminar autos). Está escrita con Node.js, Express y MongoDB (Mongoose).",
   "devDependencies": {
     "nodemon": "^3.1.10"
   },
@@ -22,7 +23,20 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-validator": "^7.3.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.1"
-  }
+    "mongoose": "^8.19.4"
+  },
+  "msw": {
+    "workerDirectory": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pulpinc0de/APIcar.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/pulpinc0de/APIcar/issues"
+  },
+  "homepage": "https://github.com/pulpinc0de/APIcar#readme"
 }

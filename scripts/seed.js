@@ -1,4 +1,3 @@
-// scripts/seed.js
 const conectarDB = require('../src/config/db');
 const Categoria = require('../src/Models/categoryModel');
 const Auto = require('../src/Models/carModel');
@@ -24,20 +23,32 @@ async function seed() {
     const categorias = [
       { nombre: 'Sedán', descripcion: 'Autos cómodos para la ciudad' },
       { nombre: 'SUV', descripcion: 'Vehículos espaciosos y altos' },
-      { nombre: 'Deportivo', descripcion: 'Autos con alto rendimiento' }
+      { nombre: 'Deportivo', descripcion: 'Autos con alto rendimiento' },
+      { nombre: 'Hatchback', descripcion: 'Autos compactos de 3/5 puertas' },
+      { nombre: 'Coupé', descripcion: 'Autos deportivos de dos puertas' },
+      { nombre: 'Convertible', descripcion: 'Autos con techo desmontable' },
+      { nombre: 'Pickup', descripcion: 'Camionetas con caja de carga' },
+      { nombre: 'Crossover', descripcion: 'Mezcla de SUV y hatchback' },
+      { nombre: 'Minivan', descripcion: 'Vehículos familiares con mayor espacio' },
+      { nombre: 'Wagon', descripcion: 'Station wagons / familiares' },
+      { nombre: 'Eléctrico', descripcion: 'Vehículos 100% eléctricos' },
+      { nombre: 'Híbrido', descripcion: 'Vehículos híbridos gasolina/eléctrico' },
+      { nombre: 'Lujo', descripcion: 'Vehículos premium' },
+      { nombre: 'Todoterreno', descripcion: 'Vehículos para off-road' },
+      { nombre: 'Familiar', descripcion: 'Vehículos pensados para la familia' }
     ];
 
     const categoriasDocs = await Categoria.create(categorias);
     console.log(`Se crearon ${categoriasDocs.length} categorias`);
 
-    // Crear usuarios (las contraseñas se hashean en el hook pre 'save')
+    // Crear usuarios 
     const usuarios = [
-      { nombre: 'Admin', email: 'admin@example.com', contraseña: 'admin123' },
-      { nombre: 'Usuario1', email: 'user1@example.com', contraseña: 'user1234' }
+      { name: 'Admin', email: 'admin@example.com', password: 'admin123' },
+      { name: 'User1', email: 'user1@example.com', password: 'user1234' }
     ];
 
     const usuariosDocs = await Usuario.create(usuarios);
-    console.log(`Se crearon ${usuariosDocs.length} usuarios`);
+    console.log(`Created ${usuariosDocs.length} users`);
 
     // Crear autos referenciando categorías
     const autos = [

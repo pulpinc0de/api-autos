@@ -1,32 +1,47 @@
 const userService = require('../Services/userService');
-const jwt = require('jsonwebtoken');
 
-const registrarUsuario = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
-    const usuario = await userService.crearUsuario(req.body);
-    res.status(201).json(usuario);
+    const result = await userService.createUser(req.body);
+    return res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({ mensaje: 'Error al registrar usuario', error });
+    console.error('Error del servidor:', error);
+    const statusCode = error.statusCode || 500;
+    return res.status(statusCode).json({ message: error.message || 'Error interno del servidor' });
   }
 };
 
 const login = async (req, res) => {
   try {
-    const { email, contraseña } = req.body;
-    const usuario = await userService.buscarPorEmail(email);
-    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    const { email } = req.body;
+    const password = req.body.password;
+    console.log('Solicitud de inicio de sesión recibida:', { email, passwordProvided: !!password });
 
-    const esValido = await userService.validarContraseña(usuario, contraseña);
-    if (!esValido) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Faltan credenciales: se requieren email y contraseña' });
+    }
 
-    const token = jwt.sign({ id: usuario._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token });
+    const user = await userService.findByEmail(email);
+    if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+    const isValid = await userService.checkPassword(user, password);
+    if (!isValid) return res.status(401).json({ message: 'Credenciales inválidas' });
+
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not configured');
+      return res.status(500).json({ message: 'Error de configuración del servidor' });
+    }
+
+    const jwt = require('jsonwebtoken');
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    return res.status(200).json({ user: { _id: user._id, name: user.name, email: user.email }, token });
   } catch (error) {
-    res.status(500).json({ mensaje: 'Error en el login', error });
+    console.error('Login error:', error);
+    return res.status(500).json({ message: 'Error durante el inicio de sesión', error: error.message });
   }
 };
 
 module.exports = {
-  registrarUsuario,
-  login
+  registerUser,
+  login,
 };
